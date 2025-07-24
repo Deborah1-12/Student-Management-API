@@ -11,6 +11,7 @@ import {
 import { CourseService } from './courses.service';
 import { ZodValidationPipe } from '../../common/pipes/pipe';
 import { registerCourseDto, registerCourseSchema } from './dto/createCourseDto';
+import { UpdateCourseDto, UpdateCourseSchema } from './dto/updateCourseDto';
 
 @Controller('/courses')
 export class CourseController {
@@ -18,8 +19,8 @@ export class CourseController {
   // defining the routes for the courses
   @Post()
   @UsePipes(new ZodValidationPipe(registerCourseSchema))
-  registerCourse(@Body() body: registerCourseDto) {
-    return this.courseService.registerCourse(body);
+  registerCourse(@Body() dto: registerCourseDto) {
+    return this.courseService.registerCourse(dto);
   }
   @Get()
   getAllCourses() {
@@ -34,9 +35,9 @@ export class CourseController {
   @Patch('/:id')
   updateCourse(
     @Param('id') id,
-    @Body(new ZodValidationPipe(registerCourseSchema)) body: registerCourseDto,
+    @Body(new ZodValidationPipe(UpdateCourseSchema)) dto: UpdateCourseDto,
   ) {
-    return this.courseService.updateCourse(id, body);
+    return this.courseService.updateCourse(id, dto);
   }
 
   @Delete('/:id')

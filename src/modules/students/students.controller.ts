@@ -10,10 +10,12 @@ import {
 } from '@nestjs/common';
 import { StudentService } from './students.service.js';
 import {
-  createStudentDto,
+  CreateStudentDto,
   createStudentSchema,
 } from './dto/createStudentDto.js';
 import { ZodValidationPipe } from '../../common/pipes/pipe.js';
+import { UpdateStudentDto, UpdateStudentSchema } from './dto/updateStudent.dto.js';
+import { Student } from './interface/students.interface.js';
 
 @Controller('/students')
 export class StudentController {
@@ -21,29 +23,29 @@ export class StudentController {
 
   @Post()
   @UsePipes(new ZodValidationPipe(createStudentSchema))
-  createStudent(@Body() body: createStudentDto) {
-    return this.studentService.createStudent(body);
+  createStudent(@Body() dto: CreateStudentDto) {
+    return this.studentService.createStudent(dto);
   }
 
-  @Get()
-  findAll() {
+  @Get() 
+  async findAll(): Promise<Student[]> {
     return this.studentService.findAll();
   }
-  @Get('/:id')
+  @Get(':id')
   //when searching for something using is always add the param decorator
   findOne(@Param('id') id) {
     return this.studentService.findOne(id);
   }
 
-  @Patch('/:id')
+  @Patch(':id')
   updateStudent(
     @Param('id') id,
-    @Body(new ZodValidationPipe(createStudentSchema)) body: createStudentDto,
+    @Body(new ZodValidationPipe(UpdateStudentSchema)) dto: UpdateStudentDto,
   ) {
-    return this.studentService.updateStudent(id, body);
+    return this.studentService.updateStudent(id, dto);
   }
 
-  @Delete('/:id')
+  @Delete(':id')
   deleteStudent(@Param('id') id) {
     return this.studentService.deleteStudent(id);
   }

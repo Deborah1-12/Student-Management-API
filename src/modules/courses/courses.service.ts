@@ -1,35 +1,36 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Course } from 'src/entities/course.entity';
+import { Repository } from 'typeorm';
+import { registerCourseDto } from './dto/createCourseDto';
+import { UpdateCourseDto } from './dto/updateCourseDto';
 
 @Injectable()
 export class CourseService {
+  constructor(@InjectRepository(Course)private courseRepo:Repository<Course>){
+    }
   //the business logic and the return messages for the courses
-  getAllCourses() {
-    return 'This are all the courses in my university';
+  async getAllCourses() {
+    return await this.courseRepo.find()
   }
 
-  getOneCourse(id) {
-    return {
-      message: `this is the course with this id:${id}`,
-    };
+  async getOneCourse(id: number) {
+  const courses =  await this.courseRepo.findOne({
+    where: {id}
+  })
+   if (!courses) throw new NotFoundException()
+      return courses;
   }
 
-  registerCourse(body) {
-    return {
-      message: 'course registered successfully',
-      data: body,
-    };
+  async registerCourse(dto: registerCourseDto) {
+    return await this.courseRepo.save(dto)
   }
 
-  updateCourse(id, body) {
-    return {
-      message: `course with ${id} updated successfully`,
-      data: body,
-    };
+  async updateCourse(id, dto: UpdateCourseDto) {
+    return await this.courseRepo.update({id}, dto)
   }
 
-  deleteCourse(id) {
-    return {
-      message: `course with ${id} deleted successfully`,
-    };
-  }
+  async deleteCourse(id:number) {
+    return await this.courseRepo.delete({id})
+}
 }

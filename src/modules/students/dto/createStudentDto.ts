@@ -8,4 +8,4 @@ export const createStudentSchema = z.object(
     }
 ).required()
 
-export type createStudentDto = z.infer<typeof createStudentSchema>
+export type CreateStudentDto = z.infer<typeof createStudentSchema>
