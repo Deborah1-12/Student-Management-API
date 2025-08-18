@@ -22,6 +22,7 @@ export class CourseController {
   registerCourse(@Body() dto: registerCourseDto) {
     return this.courseService.registerCourse(dto);
   }
+  
   @Get()
   getAllCourses() {
     return this.courseService.getAllCourses();

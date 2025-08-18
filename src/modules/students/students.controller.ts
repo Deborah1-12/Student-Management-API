@@ -28,7 +28,7 @@ export class StudentController {
   }
 
   @Get() 
-  async findAll(): Promise<Student[]> {
+  async findAll() {
     return this.studentService.findAll();
   }
   @Get(':id')

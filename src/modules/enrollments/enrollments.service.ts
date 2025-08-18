@@ -1,23 +1,26 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Enrollments } from './enrollments.schema';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class EnrollmentService {
+   constructor(
+        @InjectModel(Enrollments.name)
+        private readonly enrollmentModel: Model<Enrollments>){}
+
   //the logic and the return messages
-  enrolledStudents(studentId) {
-    return {
-      message: `Student with ID ${studentId} has no enrolled courses yet.`,
-    };
+  enrolledStudents(studentEmail) {
+  return this.enrollmentModel.find({studentEmail}).exec()
   }
-  enrolledCourses(courseId) {
-    return {
-      message: `Student with ID ${courseId} has no enrolled courses yet.`,
-    };
+  enrolledCourses(courseTitle) {
+  return this.enrollmentModel.find({courseTitle}).exec() 
   }
 
-  enroll(body){
-    return {
-      message: 'enrollment Successful',
-      data: body
-    }
+  async enroll(dto){
+    const enrollments = new this.enrollmentModel(dto)
+    return await enrollments.save(dto)
   }
 }

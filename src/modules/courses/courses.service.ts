@@ -1,36 +1,36 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Course } from 'src/entities/course.entity';
 import { Repository } from 'typeorm';
 import { registerCourseDto } from './dto/createCourseDto';
 import { UpdateCourseDto } from './dto/updateCourseDto';
+import { Course } from './course.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class CourseService {
-  constructor(@InjectRepository(Course)private courseRepo:Repository<Course>){
-    }
-  //the business logic and the return messages for the courses
+  constructor(
+      @InjectModel(Course.name)
+      private readonly courseModel: Model<Course>){}
   async getAllCourses() {
-    return await this.courseRepo.find()
+    return 
   }
 
   async getOneCourse(id: number) {
-  const courses =  await this.courseRepo.findOne({
-    where: {id}
-  })
-   if (!courses) throw new NotFoundException()
-      return courses;
+      return 
   }
 
   async registerCourse(dto: registerCourseDto) {
-    return await this.courseRepo.save(dto)
+    const course = new this.courseModel(dto)
+    return await course.save()
+
   }
 
   async updateCourse(id, dto: UpdateCourseDto) {
-    return await this.courseRepo.update({id}, dto)
+    return 
   }
 
   async deleteCourse(id:number) {
-    return await this.courseRepo.delete({id})
+    return
 }
 }

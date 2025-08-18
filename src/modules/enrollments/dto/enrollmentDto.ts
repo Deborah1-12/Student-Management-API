@@ -3,8 +3,8 @@ import z from 'zod';
 //zod validation schema
 export const enrollmentSchema = z.object(
     {
-        studentId: z.number(),
-        courseId: z.number(),
+        studentEmail: z.email(),
+        courseTitle: z.string(),
         
     }
 ).required()

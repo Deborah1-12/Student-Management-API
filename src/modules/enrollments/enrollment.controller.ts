@@ -9,16 +9,16 @@ export class EnrollmentController {
   //defining the routes for enrollments
   @Post()
   @UsePipes(new ZodValidationPipe(enrollmentSchema))
-  enroll(@Body() body:EnrollmentDto){
-    return this.enrollmentService.enroll(body)
+  enroll(@Body() dto:EnrollmentDto){
+    return this.enrollmentService.enroll(dto)
   }
-  @Get()
-  enrolledStudents(@Query('studentId') studentId) {
-    return this.enrollmentService.enrolledStudents(studentId);
+  @Get('allStudents')
+  enrolledStudents(@Query('studentEmail') studentEmail) {
+    return this.enrollmentService.enrolledStudents(studentEmail);
   }
 
-  @Get()
-  enrolledCourses(@Query('courseId') courseId) {
-    return this.enrollmentService.enrolledCourses(courseId);
+  @Get('allCourses')
+  enrolledCourses(@Query('courseTitle') courseTitle) {
+    return this.enrollmentService.enrolledCourses(courseTitle);
   }
 }
