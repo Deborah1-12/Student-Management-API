@@ -1,15 +1,27 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
+import { SignUpDto, SignInDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+   @Post('signup')
+  async signup(@Body() signupdto: SignUpDto, @Res() res: Response) {
+     const access_token = await this.authService.signup(signupdto);
+    res.cookie('jwt', access_token, {httpOnly: true} )
+    return {
+          status: 'success',
+          message: 'user saved successfully',
+          'access-token': access_token,
+        };
+  }
+
+  @Post('signin')
+  signin(@Body() signindto: SignInDto) {
+    return this.authService.signin(signindto);
   }
 
   @Get()

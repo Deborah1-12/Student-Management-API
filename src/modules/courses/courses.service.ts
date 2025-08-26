@@ -13,11 +13,11 @@ export class CourseService {
       @InjectModel(Course.name)
       private readonly courseModel: Model<Course>){}
   async getAllCourses() {
-    return 
+    return this.courseModel.find().exec();
   }
 
   async getOneCourse(id: number) {
-      return 
+      return this.courseModel.findById(id).exec()
   }
 
   async registerCourse(dto: registerCourseDto) {
@@ -27,10 +27,10 @@ export class CourseService {
   }
 
   async updateCourse(id, dto: UpdateCourseDto) {
-    return 
+    return this.courseModel.findByIdAndUpdate(id, dto).exec()
   }
 
   async deleteCourse(id:number) {
-    return
+    return this.courseModel.findByIdAndDelete
 }
 }
